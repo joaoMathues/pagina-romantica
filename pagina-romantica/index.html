@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Central do Amor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Estilo da tela de login */
+        .login-container {
+            background: url('imagem 10.png') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-form {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Estilo do carrossel */
+        .carousel-container {
+            max-width: 600px;
+            margin: 20px auto;
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            text-align: center;
+        }
+        
+        .carousel-item img {
+            width: 80%;
+            max-height: 400px;
+            object-fit: cover;
+            margin: 0 auto;
+            display: block;
+            border-radius: 8px;
+        }
+        
+        .carousel-caption {
+            padding: 15px;
+            background: rgba(255,255,255,0.8);
+            margin: 10px auto;
+            width: 80%;
+            border-radius: 5px;
+        }
+        
+        .carousel-button {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,107,107,0.7);
+            color: white;
+            border: none;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 18px;
+        }
+        
+        .carousel-button.prev {
+            left: 10px;
+        }
+        
+        .carousel-button.next {
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Tela de Login Romântica -->
+    <div class="login-container" id="login-screen">
+        <!-- Corações animados -->
+        <div class="heart" style="top:20%; left:10%">❤</div>
+        <div class="heart" style="top:30%; left:80%">❤</div>
+        <div class="heart" style="top:70%; left:15%">❤</div>
+        <div class="heart" style="top:80%; left:75%">❤</div>
+        
+        <div class="login-form">
+            <h2>Nosso Amor</h2>
+            <p>Digite a senha do coração:</p>
+            <input type="password" id="password-input" placeholder="❤ Nossa data de namoro ❤">
+            <button onclick="checkPassword()">Entrar</button>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal -->
+    <div class="container" id="main-content" style="display:none;">
+        <div class="carousel-container">
+            <div class="carousel" id="photo-carousel">
+                <!-- Fotos serão adicionadas aqui -->
+            </div>
+            <button class="carousel-button prev" onclick="moveSlide(-1)">❮</button>
+            <button class="carousel-button next" onclick="moveSlide(1)">❯</button>
+        </div>
+
+        <div class="instrucoes">
+            <p>Olhe nossas fotos com carinho e depois clique no coração abaixo</p>
+            <button class="heart-button" onclick="window.location.href='mensagem.html'">❤</button>
+        </div>
+    </div>
+
+    <script>
+        // Controle de Login
+        function checkPassword() {
+            const password = document.getElementById('password-input').value;
+            if(password === '2102') {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('main-content').style.display = 'block';
+                initCarousel();
+            } else {
+                alert('Senha incorreta! Tente novamente.');
+            }
+        }
+
+        // Controle do Carrossel
+        let currentSlide = 0;
+        
+        function initCarousel() {
+            // Carrega automaticamente todas as fotos da Pasta pimo
+            const photos = [];
+            const texts = [
+                "O início de tudo",
+                "As pequenas coisas que fazem nosso amor único", 
+                "Seu sorriso que ilumina meus dias",
+                "Nossa conexão que só cresce com o tempo",
+                "O momento em que eu soube que você era especial",
+                "É no seu abraço que me sinto seguro",
+                "Seu abraço que me faz sentir em casa",
+                "Aquele dia especial que nunca vou esquecer",
+                "Nossos sonhos compartilhados",
+                "O amor que construímos a cada dia",
+                "Nosso futuro brilhante pela frente"
+            ];
+            
+            // Lista manual das imagens disponíveis
+            const availableImages = [
+                'image 1.jpeg', 'image 2.jpeg', 'image 3.jpeg', 
+                'image 4.jpeg', 'image 5.jpeg', 'image 6.jpeg',
+                'image 7.jpeg', 'image 8.jpeg', 'image 9.jpeg',
+                'image 10.jpeg', 'image 11.jpeg'
+            ];
+            
+            // Adiciona apenas as imagens que existem
+            availableImages.forEach(img => {
+                photos.push(img);
+            });
+            
+            const carousel = document.getElementById('photo-carousel');
+            carousel.innerHTML = '';
+            
+            photos.forEach((photo, index) => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-item';
+                const img = document.createElement('img');
+                img.src = photo.replace(/ /g, '%20'); // Codifica espaços para URLs
+                img.alt = "Nossa foto";
+                img.onerror = function() {
+                    this.parentNode.style.display = 'none';
+                };
+                const caption = document.createElement('div');
+                caption.className = 'carousel-caption';
+                caption.textContent = texts[index];
+                slide.appendChild(img);
+                slide.appendChild(caption);
+                carousel.appendChild(slide);
+            });
+            
+            // Inicia transição automática a cada 5 segundos
+            setInterval(() => {
+                moveSlide(1);
+            }, 5000);
+        }
+        
+        function moveSlide(n) {
+            currentSlide += n;
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            const carousel = document.getElementById('photo-carousel');
+            const slides = document.querySelectorAll('.carousel-item');
+            
+            if (slides.length === 0) {
+                carousel.innerHTML = '<div class="no-photos">Nenhuma foto encontrada. Por favor, adicione imagens com nomes "image 1.jpg", "image 2.jpg", etc.</div>';
+                return;
+            }
+            
+            if (currentSlide >= slides.length) currentSlide = 0;
+            if (currentSlide < 0) currentSlide = slides.length - 1;
+            
+            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        // Tecla Enter para login
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+    </script>
+</body>
+</html>
